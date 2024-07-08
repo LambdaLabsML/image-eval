@@ -31,7 +31,11 @@ def get_device(index):
     return torch.device(f'cuda:{index}')
 
 def generate_image(model_name, prompt, device):
-    pipe = StableDiffusionPipeline.from_pretrained(model_name, torch_dtype=torch.float16)
+    pipe = StableDiffusionPipeline.from_pretrained(
+        model_name, 
+        torch_dtype=torch.float16, 
+        low_cpu_mem_usage=True  # Enable low CPU memory usage
+    )
     pipe = pipe.to(device)  # Use specified GPU for inference
     image = pipe(prompt).images[0]
     return image
@@ -63,10 +67,10 @@ if st.button("Generate"):
         with col2:
             device = get_device(gpu_index % num_gpus)
             image_1 = generate_image(model_1, prompt, device)
-            st.image(image_1, caption="Model 1")
+            st.image(image_1)
             gpu_index += 1
         with col3:
             device = get_device(gpu_index % num_gpus)
             image_2 = generate_image(model_2, prompt, device)
-            st.image(image_2, caption="Model 2")
+            st.image(image_2)
             gpu_index += 1
