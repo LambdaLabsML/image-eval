@@ -36,8 +36,21 @@ def generate_image(model_name, prompt, device):
     image = pipe(prompt).images[0]
     return image
 
-def generate_grey_image(image):
-    return ImageOps.grayscale(image)
+# CSS to center the prompts vertically
+st.markdown(
+    """
+    <style>
+    .center-vertical {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 200px; /* Adjust this height as needed */
+        text-align: center;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 if st.button("Generate"):
     num_gpus = torch.cuda.device_count()
@@ -46,7 +59,7 @@ if st.button("Generate"):
     for prompt in prompts:
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.write(prompt)
+            st.markdown(f"<div class='center-vertical'>{prompt}</div>", unsafe_allow_html=True)
         with col2:
             device = get_device(gpu_index % num_gpus)
             image_1 = generate_image(model_1, prompt, device)
