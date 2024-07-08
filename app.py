@@ -30,12 +30,16 @@ prompts = [
 def get_device(index):
     return torch.device(f'cuda:{index}')
 
-def generate_image(model_name, prompt, device):
-    pipe = StableDiffusionPipeline.from_pretrained(
+@st.cache_resource
+def load_model(model_name):
+    return StableDiffusionPipeline.from_pretrained(
         model_name, 
         torch_dtype=torch.float16, 
         low_cpu_mem_usage=True  # Enable low CPU memory usage
     )
+
+def generate_image(model_name, prompt, device):
+    pipe = load_model(model_name)
     pipe = pipe.to(device)  # Use specified GPU for inference
     image = pipe(prompt).images[0]
     return image
