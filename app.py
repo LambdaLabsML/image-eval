@@ -1,6 +1,8 @@
 import streamlit as st
 from diffusers import StableDiffusionPipeline
 import torch
+from PIL import ImageOps
+import os
 
 # List of available text-to-image models
 models = ["CompVis/stable-diffusion-v1-4", "runwayml/stable-diffusion-v1-5"]
@@ -25,19 +27,33 @@ prompts = [
     "A space station orbiting a distant planet"
 ]
 
-def generate_image(model_name, prompt):
+def get_device(index):
+    return torch.device(f'cuda:{index}')
+
+def generate_image(model_name, prompt, device):
     pipe = StableDiffusionPipeline.from_pretrained(model_name, torch_dtype=torch.float16)
-    pipe = pipe.to("cuda")  # Use GPU for faster inference
+    pipe = pipe.to(device)  # Use specified GPU for inference
     image = pipe(prompt).images[0]
     return image
 
+def generate_grey_image(image):
+    return ImageOps.grayscale(image)
+
 if st.button("Generate"):
+    num_gpus = torch.cuda.device_count()
+    gpu_index = 0
+
     for prompt in prompts:
-        st.write(f"{prompt}")
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         with col1:
-            image_1 = generate_image(model_1, prompt)
-            st.image(image_1)
+            st.write(prompt)
         with col2:
-            image_2 = generate_image(model_2, prompt)
-            st.image(image_2)
+            device = get_device(gpu_index % num_gpus)
+            image_1 = generate_image(model_1, prompt, device)
+            st.image(image_1, caption="Model 1")
+            gpu_index += 1
+        with col3:
+            device = get_device(gpu_index % num_gpus)
+            image_2 = generate_image(model_2, prompt, device)
+            st.image(image_2, caption="Model 2")
+            gpu_index += 1
