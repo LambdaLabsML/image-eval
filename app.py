@@ -31,14 +31,14 @@ def get_top_trendy_text_to_image_models():
     models = [
         "stabilityai/stable-diffusion-3-medium-diffusers",
         # "stabilityai/sdxl-turbo", OOM error
-        "stabilityai/stable-diffusion-xl-base-1.0",
-        "Kwai-Kolors/Kolors",
-        "mann-e/Mann-E_Dreams",
+        #"stabilityai/stable-diffusion-xl-base-1.0",
+        #"Kwai-Kolors/Kolors",
+        #"mann-e/Mann-E_Dreams", 
         "runwayml/stable-diffusion-v1-5",
         "stabilityai/stable-diffusion-2-1",
-        "cagliostrolab/animagine-xl-3.1",
-        "ByteDance/SDXL-Lightning",
-        "ByteDance/Hyper-SD",
+        #"cagliostrolab/animagine-xl-3.1",
+        #"ByteDance/SDXL-Lightning",
+        #"ByteDance/Hyper-SD",
     ]
     return models
 
