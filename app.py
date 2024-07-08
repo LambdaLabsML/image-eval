@@ -1,9 +1,25 @@
+import os
 import streamlit as st
 from diffusers import StableDiffusionPipeline
 import torch
 from PIL import ImageOps
 import requests
-import huggingface_hub
+from huggingface_hub import HfApi, HfFolder
+
+# Set environment variable to turn off oneDNN custom operations
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+# Set your Hugging Face token (recommended to set this as an environment variable)
+HF_TOKEN = os.getenv('HF_TOKEN')
+
+if HF_TOKEN is None:
+    raise ValueError("Hugging Face token is not set. Please set the HF_TOKEN environment variable.")
+
+# Save the Hugging Face token
+HfFolder.save_token(HF_TOKEN)
+api = HfApi()
+
+
 
 # Function to fetch and filter top trendy text-to-image models
 def get_top_trendy_text_to_image_models():
@@ -14,7 +30,6 @@ def get_top_trendy_text_to_image_models():
     # models = [model_id for model_id in models if not any(exclude_word in model_id for exclude_word in exclude)]
 
     models = [
-        "stabilityai/stable-diffusion-3-medium",
         "stabilityai/stable-diffusion-3-medium-diffusers",
         "stabilityai/sdxl-turbo",
         "stabilityai/stable-diffusion-xl-base-1.0",
@@ -61,7 +76,8 @@ def get_device(index):
 def load_model(model_name):
     return StableDiffusionPipeline.from_pretrained(
         model_name, 
-        torch_dtype=torch.float16, 
+        torch_dtype=torch.float16,
+        use_auth_token=HF_TOKEN,
         low_cpu_mem_usage=True  # Enable low CPU memory usage
     )
 
