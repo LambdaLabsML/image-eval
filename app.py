@@ -6,10 +6,26 @@ import requests
 import huggingface_hub
 
 # Function to fetch and filter top trendy text-to-image models
-def get_top_trendy_text_to_image_models(exclude=['stability', 'inpainting']):
-    models = huggingface_hub.list_models(filter="text-to-image", sort="downloads", direction=-1, limit=10)
-    models = [m.id for m in models]
-    models = [model_id for model_id in models if not any(exclude_word in model_id for exclude_word in exclude)]
+def get_top_trendy_text_to_image_models():
+
+    # Deprecating search of trendy because too many issues (eg: exclude=['stability', 'inpainting'])
+    # models = huggingface_hub.list_models(filter="text-to-image", sort="downloads", direction=-1, limit=10)
+    # models = [m.id for m in models]
+    # models = [model_id for model_id in models if not any(exclude_word in model_id for exclude_word in exclude)]
+
+    models = [
+        "stabilityai/stable-diffusion-3-medium",
+        "stabilityai/stable-diffusion-3-medium-diffusers",
+        "stabilityai/sdxl-turbo",
+        "stabilityai/stable-diffusion-xl-base-1.0",
+        "Kwai-Kolors/Kolors",
+        "mann-e/Mann-E_Dreams",
+        "runwayml/stable-diffusion-v1-5",
+        "stabilityai/stable-diffusion-2-1",
+        "cagliostrolab/animagine-xl-3.1",
+        "ByteDance/SDXL-Lightning",
+        "ByteDance/Hyper-SD",
+    ]
     return models
 
 # Fetch the top trendy models
