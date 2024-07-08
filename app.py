@@ -2,14 +2,23 @@ import streamlit as st
 from diffusers import StableDiffusionPipeline
 import torch
 from PIL import ImageOps
-import os
+import requests
+import huggingface_hub
 
-# List of available text-to-image models
-models = ["CompVis/stable-diffusion-v1-4", "runwayml/stable-diffusion-v1-5"]
+# Function to fetch and filter top trendy text-to-image models
+def get_top_trendy_text_to_image_models():
+    models = huggingface_hub.list_models(filter="text-to-image", sort="downloads", direction=-1, limit=10)
+    return [m.id for m in models]
 
-# Create dropdowns for selecting models
-model_1 = st.selectbox("Select the first text-to-image model", models)
-model_2 = st.selectbox("Select the second text-to-image model", models)
+# Fetch the top trendy models
+models = get_top_trendy_text_to_image_models()
+
+if models:
+    # Create dropdowns for selecting models
+    model_1 = st.selectbox("Select the first text-to-image model", models)
+    model_2 = st.selectbox("Select the second text-to-image model", models)
+else:
+    st.error("No models available to select.")
 
 # List of diverse prompts
 prompts = [
