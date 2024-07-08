@@ -6,7 +6,7 @@ import requests
 import huggingface_hub
 
 # Function to fetch and filter top trendy text-to-image models
-def get_top_trendy_text_to_image_models(exclude=['stability']):
+def get_top_trendy_text_to_image_models(exclude=['stability', 'inpainting']):
     models = huggingface_hub.list_models(filter="text-to-image", sort="downloads", direction=-1, limit=10)
     models = [m.id for m in models]
     models = [model_id for model_id in models if not any(exclude_word in model_id for exclude_word in exclude)]
