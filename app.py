@@ -1,6 +1,6 @@
 import os
 import streamlit as st
-from diffusers import StableDiffusionPipeline
+from diffusers import StableDiffusionPipeline, StableDiffusion3Pipeline, AutoPipelineForText2Image
 import torch
 from PIL import ImageOps
 import requests
@@ -20,7 +20,6 @@ HfFolder.save_token(HF_TOKEN)
 api = HfApi()
 
 
-
 # Function to fetch and filter top trendy text-to-image models
 def get_top_trendy_text_to_image_models():
 
@@ -31,7 +30,7 @@ def get_top_trendy_text_to_image_models():
 
     models = [
         "stabilityai/stable-diffusion-3-medium-diffusers",
-        "stabilityai/sdxl-turbo",
+        # "stabilityai/sdxl-turbo", OOM error
         "stabilityai/stable-diffusion-xl-base-1.0",
         "Kwai-Kolors/Kolors",
         "mann-e/Mann-E_Dreams",
@@ -74,12 +73,30 @@ def get_device(index):
 
 @st.cache_resource
 def load_model(model_name):
-    return StableDiffusionPipeline.from_pretrained(
-        model_name, 
-        torch_dtype=torch.float16,
-        use_auth_token=HF_TOKEN,
-        low_cpu_mem_usage=True  # Enable low CPU memory usage
+
+    print(f"[ ] Loading model {model_name}")
+    if model_name in ["stabilityai/stable-diffusion-3-medium-diffusers"]:
+        pipe = StableDiffusion3Pipeline.from_pretrained(
+            model_name,
+            torch_dtype=torch.float16,
+            low_cpu_mem_usage=True
+            )
+        
+    elif model_name in ["stabilityai/sdxl-turbo"]:
+        pipe = AutoPipelineForText2Image.from_pretrained(
+            model_name,
+            torch_dtype=torch.float16,
+            variant="fp16")
+    else:
+        print("CASE 3")
+        print("***")
+        pipe = StableDiffusionPipeline.from_pretrained(
+            model_name, 
+            torch_dtype=torch.float16,
+            low_cpu_mem_usage=True  # Enable low CPU memory usage
     )
+    print(f"[+] Loaded model {model_name}")
+    return pipe
 
 def generate_image(model_name, prompt, device):
     pipe = load_model(model_name)
