@@ -88,8 +88,6 @@ def load_model(model_name):
             torch_dtype=torch.float16,
             variant="fp16")
     else:
-        print("CASE 3")
-        print("***")
         pipe = StableDiffusionPipeline.from_pretrained(
             model_name, 
             torch_dtype=torch.float16,

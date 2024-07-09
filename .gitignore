@@ -1,0 +1,8 @@
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environment
+venv/
+
+# Draft file
+test.py
