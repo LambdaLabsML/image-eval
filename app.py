@@ -3,6 +3,7 @@ import streamlit as st
 import torch
 from huggingface_hub import HfApi, HfFolder
 from utils.utils import get_device, generate_image
+from utils.models import get_models
 
 # Set environment variable to turn off oneDNN custom operations
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
@@ -20,12 +21,12 @@ api = HfApi()
 # List of diverse prompts
 from utils.prompts import get_prompts
 prompts = get_prompts()
-prompts = prompts[:1]
+prompts = prompts[:3]
 
 # List of text-to-image models
 # from utils.models import get_models
-# models = get_models()
-models_debug = ["stabilityai/stable-diffusion-2-1"]
+models = get_models()
+models_debug = models[1:3]
 model_1 = st.selectbox("Select the first text-to-image model", models_debug)
 model_2 = st.selectbox("Select the second text-to-image model", models_debug)
 
