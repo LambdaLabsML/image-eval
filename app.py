@@ -46,7 +46,7 @@ st.markdown(
         align-items: center;
     }
     .large-checkbox .stCheckbox > div {
-        transform: scale(5); /* Adjust the scale as needed for the desired size */
+        transform: scale(1.5); /* Adjust the scale as needed for the desired size */
     }
     </style>
     """,
@@ -79,12 +79,12 @@ for prompt, images in st.session_state.generated_images.items():
     with col1:
         st.markdown(f"<div class='center-horizontal'><div class='center-vertical'>{prompt}</div></div>", unsafe_allow_html=True)
     with col2:
-        st.markdown(f"<div class='center-horizontal'>", unsafe_allow_html=True)
+        st.markdown("<div class='center-horizontal large-checkbox'>", unsafe_allow_html=True)
         st.image(images['image_1'])
         st.checkbox("select image_1", key=f"checkbox_{prompt}_1_persist", label_visibility="collapsed")
         st.markdown("</div>", unsafe_allow_html=True)
     with col3:
-        st.markdown(f"<div class='center-horizontal'>", unsafe_allow_html=True)
+        st.markdown("<div class='center-horizontal large-checkbox'>", unsafe_allow_html=True)
         st.image(images['image_2'])
         st.checkbox("select image_2", key=f"checkbox_{prompt}_2_persist", label_visibility="collapsed")
         st.markdown("</div>", unsafe_allow_html=True)
