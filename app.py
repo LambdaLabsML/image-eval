@@ -29,20 +29,29 @@ models_debug = ["stabilityai/stable-diffusion-2-1"]
 model_1 = st.selectbox("Select the first text-to-image model", models_debug)
 model_2 = st.selectbox("Select the second text-to-image model", models_debug)
 
-# CSS to center the checkbox horizontally under the image
+# CSS to center the checkbox horizontally under the image and make it larger
 st.markdown(
     """
     <style>
+    .center-vertical {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 200px; /* Adjust this height as needed */
+        text-align: center;
+    }
     .center-horizontal {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
+    .large-checkbox .stCheckbox > div {
+        transform: scale(5); /* Adjust the scale as needed for the desired size */
+    }
     </style>
     """,
     unsafe_allow_html=True,
 )
-
 # Initialize session state for storing generated images
 if 'generated_images' not in st.session_state:
     st.session_state.generated_images = {}
@@ -72,10 +81,10 @@ for prompt, images in st.session_state.generated_images.items():
     with col2:
         st.markdown(f"<div class='center-horizontal'>", unsafe_allow_html=True)
         st.image(images['image_1'])
-        st.checkbox("", key=f"checkbox_{prompt}_1_persist")
+        st.checkbox("select image_1", key=f"checkbox_{prompt}_1_persist", label_visibility="collapsed")
         st.markdown("</div>", unsafe_allow_html=True)
     with col3:
         st.markdown(f"<div class='center-horizontal'>", unsafe_allow_html=True)
         st.image(images['image_2'])
-        st.checkbox("", key=f"checkbox_{prompt}_2_persist")
+        st.checkbox("select image_2", key=f"checkbox_{prompt}_2_persist", label_visibility="collapsed")
         st.markdown("</div>", unsafe_allow_html=True)
