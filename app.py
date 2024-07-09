@@ -20,7 +20,7 @@ api = HfApi()
 # List of diverse prompts
 from utils.prompts import get_prompts
 prompts = get_prompts()
-prompts = prompts[:2]
+prompts = prompts[:1]
 
 # List of text-to-image models
 # from utils.models import get_models
@@ -29,16 +29,14 @@ models_debug = ["stabilityai/stable-diffusion-2-1"]
 model_1 = st.selectbox("Select the first text-to-image model", models_debug)
 model_2 = st.selectbox("Select the second text-to-image model", models_debug)
 
-# CSS to center the prompts vertically
+# CSS to center the checkbox horizontally under the image
 st.markdown(
     """
     <style>
-    .center-vertical {
+    .center-horizontal {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        height: 200px; /* Adjust this height as needed */
-        text-align: center;
     }
     </style>
     """,
@@ -66,14 +64,18 @@ if st.button("Generate"):
         st.session_state.generated_images[prompt]['image_2'] = image_2
         gpu_index += 2
 
-# Display stored images with checkboxes
+# Display stored images with centered checkboxes
 for prompt, images in st.session_state.generated_images.items():
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown(f"<div class='center-vertical'>{prompt}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='center-horizontal'><div class='center-vertical'>{prompt}</div></div>", unsafe_allow_html=True)
     with col2:
+        st.markdown(f"<div class='center-horizontal'>", unsafe_allow_html=True)
         st.image(images['image_1'])
-        st.checkbox("Select Image 1", key=f"checkbox_{prompt}_1_persist")
+        st.checkbox("", key=f"checkbox_{prompt}_1_persist")
+        st.markdown("</div>", unsafe_allow_html=True)
     with col3:
+        st.markdown(f"<div class='center-horizontal'>", unsafe_allow_html=True)
         st.image(images['image_2'])
-        st.checkbox("Select Image 2", key=f"checkbox_{prompt}_2_persist")
+        st.checkbox("", key=f"checkbox_{prompt}_2_persist")
+        st.markdown("</div>", unsafe_allow_html=True)
