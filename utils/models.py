@@ -1,3 +1,4 @@
+import torch
 import streamlit as st
 from diffusers import StableDiffusionPipeline, StableDiffusion3Pipeline, AutoPipelineForText2Image
 
