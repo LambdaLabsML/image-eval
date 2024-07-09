@@ -29,7 +29,6 @@ models_debug = ["stabilityai/stable-diffusion-2-1"]
 model_1 = st.selectbox("Select the first text-to-image model", models_debug)
 model_2 = st.selectbox("Select the second text-to-image model", models_debug)
 
-
 # CSS to center the prompts vertically
 st.markdown(
     """
@@ -53,12 +52,16 @@ if 'generated_images' not in st.session_state:
 if st.button("Generate"):
     num_gpus = torch.cuda.device_count()
     gpu_index = 0
+    progress_bar = st.progress(0)
+    total_steps = len(prompts) * 2  # Total number of images to be generated
 
-    for prompt in prompts:
+    for i, prompt in enumerate(prompts):
         st.session_state.generated_images[prompt] = {}
         device = get_device(gpu_index % num_gpus)
         image_1 = generate_image(model_1, prompt, device)
+        progress_bar.progress((i * 2 + 1) / total_steps)
         image_2 = generate_image(model_2, prompt, device)
+        progress_bar.progress((i * 2 + 2) / total_steps)
         st.session_state.generated_images[prompt]['image_1'] = image_1
         st.session_state.generated_images[prompt]['image_2'] = image_2
         gpu_index += 2
