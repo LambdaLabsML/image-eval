@@ -17,7 +17,8 @@ git clone https://github.com/LambdaLabsML/image-eval.git
 
 Build opensora inference server image
 ```bash
-sudo docker build -t opensora_api -f image-eval/models/opensora/Dockerfile .
+cd image-eval/models/opensora
+sudo docker build -t opensora_api  .
 ```
 
 Run the inference server
@@ -30,7 +31,7 @@ sudo docker run -d --gpus all -p 5000:5000 -v /home/ubuntu/data:/data opensora_a
 Make request to the inference server:
 ```bash
 export SERVER_IP=150.136.145.26
-curl -X POST http://${SERVER_IP}/generate -H "Content-Type: application/json" -d '{
+curl -X POST http://${SERVER_IP}:5000/generate -H "Content-Type: application/json" -d '{
     "num_frames": "3s",
     "resolution": "360p",
     "aspect_ratio": "16:9",
