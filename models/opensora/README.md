@@ -1,15 +1,20 @@
 # Deploying OpenSora 1.2 for inference on Lambda On-demand Cloud instances
 
-source: https://github.com/hpcaitech/Open-Sora?tab=readme-ov-file#inference
-
-
-### Setup
+## Setup
 
 Build opensora base image
 ```bash
+cd ~
 git clone https://github.com/hpcaitech/Open-Sora.git
 cd Open-Sora
 sudo docker build -t opensora .
+```
+
+Clone this repo if you haven't already:
+```bash
+cd ~
+git clone https://github.com/LambdaLabsML/image-eval.git
+cd image-eval
 ```
 
 Build opensora inference server image
@@ -17,18 +22,28 @@ Build opensora inference server image
 sudo docker build opensora_api -f image_eval/models/opensora/Dockerfile .
 ```
 
+## Usage
+
+Make request to the inference server:
+```bash
+export SERVER_IP=150.136.145.26
+curl -X POST http://${SERVER_IP}/generate -H "Content-Type: application/json" -d '{
+    "num_frames": "3s",
+    "resolution": "360p",
+    "aspect_ratio": "16:9",
+    "prompt": "a beautiful sunset"
+}'
+```
+
+
+
+## Usage (deprecated)
+
 Run container in interactive mode:
 ```bash
 mkdir home/ubuntu/data
 sudo docker run -ti --gpus all -v /home/ubuntu/data:/data opensora
 ```
-
-Notes:
-* Ran into issues with non docker route stemming from different CUDA version in ODC and in the OpenSora docs. For instance, xformers was not compatible with the CUDA version in the ODC. Tried building from source to no avail.
-* Needed to use `sudo` with docker because I ran into permission issue using docker on ODC otherwise
-
-### Usage
-
 
 Run inference in container:
 ```bash
@@ -42,3 +57,13 @@ python scripts/inference.py \
     --save-dir /data
 ```
 
+
+
+
+---
+
+
+Notes:
+* source: https://github.com/hpcaitech/Open-Sora?tab=readme-ov-file#inference
+* Ran into issues with non docker route stemming from different CUDA version in ODC and in the OpenSora docs. For instance, xformers was not compatible with the CUDA version in the ODC. Tried building from source to no avail.
+* Needed to use `sudo` with docker because I ran into permission issue using docker on ODC otherwise
