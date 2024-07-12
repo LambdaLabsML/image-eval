@@ -6,19 +6,18 @@ Build opensora base image
 ```bash
 git clone https://github.com/hpcaitech/Open-Sora.git
 cd Open-Sora
-sudo docker build -t opensora -f Open-Sora/Dockerfile .
+sudo docker build -t opensora -f Dockerfile .
 ```
 
 Clone this repo if you haven't already:
 ```bash
 cd ~
 git clone https://github.com/LambdaLabsML/image-eval.git
-cd image-eval
 ```
 
 Build opensora inference server image
 ```bash
-sudo docker build opensora_api -f image_eval/models/opensora/Dockerfile .
+sudo docker build -t opensora_api -f image-eval/models/opensora/Dockerfile .
 ```
 
 Run the inference server
