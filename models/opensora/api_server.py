@@ -27,9 +27,10 @@ def generate_image():
     
     if result.returncode == 0:
         # Assuming the generated file is saved in the save_dir with a known name
-        generated_file_path = os.path.join(save_dir, 'sample_1.mp4')  # Update this with the correct filename
+        generated_file_path = os.path.join(save_dir, 'sample_0000.mp4')  # Update this with the correct filename
         if os.path.exists(generated_file_path):
             # Remove sample_1.mp4 from the save_dir here... ?
+            os.remove(generated_file_path)
             return send_file(generated_file_path, as_attachment=True)
         else:
             return jsonify({'message': 'Image generation successful, but file not found', 'save_dir': save_dir}), 200
