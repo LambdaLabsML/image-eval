@@ -4,10 +4,9 @@
 
 Build opensora base image
 ```bash
-cd ~
 git clone https://github.com/hpcaitech/Open-Sora.git
 cd Open-Sora
-sudo docker build -t opensora .
+sudo docker build -t opensora -f Open-Sora/Dockerfile .
 ```
 
 Clone this repo if you haven't already:
@@ -20,6 +19,11 @@ cd image-eval
 Build opensora inference server image
 ```bash
 sudo docker build opensora_api -f image_eval/models/opensora/Dockerfile .
+```
+
+Run the inference server
+```bash
+sudo docker run -d --gpus all -p 5000:5000 -v /home/ubuntu/data:/data opensora_api
 ```
 
 ## Usage
