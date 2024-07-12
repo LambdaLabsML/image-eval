@@ -32,7 +32,7 @@ Make request to the inference server:
 ```bash
 export SERVER_IP=150.136.145.26
 curl -X POST http://${SERVER_IP}:5000/generate -H "Content-Type: application/json" -d '{
-    "num_frames": "3s",
+    "num_frames": "24",
     "resolution": "360p",
     "aspect_ratio": "16:9",
     "prompt": "a beautiful sunset"
