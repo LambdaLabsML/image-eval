@@ -7,7 +7,7 @@ RUN pip install Flask
 COPY api_server.py .
 
 # Set the environment variable for save directory
-ENV SAVE_DIR="/workspace/Open-Sora/samples/samples"
+ENV SAVE_DIR="/home/ubuntu/data"
 
 # Expose the port the API server will run on
 EXPOSE 5000

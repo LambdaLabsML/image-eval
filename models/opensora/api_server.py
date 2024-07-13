@@ -2,10 +2,10 @@ from flask import Flask, request, jsonify, send_file
 import subprocess
 import os
 import logging
+import glob
 
 app = Flask(__name__)
 
-# Configure logging
 # Configure logging to file
 logging.basicConfig(filename='/data/api_server.log', level=logging.DEBUG, 
                     format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
@@ -14,13 +14,19 @@ logging.basicConfig(filename='/data/api_server.log', level=logging.DEBUG,
 @app.route('/generate', methods=['POST'])
 def generate_image():
 
+
     try:
         data = request.json
         num_frames = data.get('num_frames', '4s')
         resolution = data.get('resolution', '360p')
         aspect_ratio = data.get('aspect_ratio', '9:16')
         prompt = data.get('prompt', 'a beautiful waterfall')
-        save_dir = os.environ.get('SAVE_DIR', '/data')
+        save_dir = os.environ.get('SAVE_DIR', '/data')  
+
+        # Remove files with name pattern `sample_*.mp4`
+        for file_path in glob.glob(os.path.join(save_dir, 'sample_*.mp4')):
+            os.remove(file_path)
+            logging.debug(f"Removed file: {file_path}")
         
         cmd = [
             'python', 'scripts/inference.py',

@@ -23,8 +23,15 @@ sudo docker build -t opensora_api  .
 
 Run the inference server
 ```bash
-sudo docker run -d --gpus all -p 5000:5000 -v /home/ubuntu/data:/data opensora_api
+sudo docker run -d --gpus all -p 5000:5000 -v /home/ubuntu/data:/data opensora_api:latest
 ```
+
+To shut down the running container
+```bash
+sudo docker ps # identify name of container to stop
+sudo docker stop <container_name> # stop container
+```
+
 
 ## Usage
 
@@ -32,11 +39,11 @@ Make request to the inference server:
 ```bash
 export SERVER_IP=150.136.145.26
 curl -X POST http://${SERVER_IP}:5000/generate -H "Content-Type: application/json" -d '{
-    "num_frames": "24",
+    "num_frames": "12",
     "resolution": "360p",
     "aspect_ratio": "16:9",
     "prompt": "a beautiful sunset"
-}'
+}' --output /tmp/opensora_sample.mp4
 ```
 
 
