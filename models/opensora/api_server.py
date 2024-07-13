@@ -21,7 +21,7 @@ def generate_image():
         resolution = data.get('resolution', '360p')
         aspect_ratio = data.get('aspect_ratio', '9:16')
         prompt = data.get('prompt', 'a beautiful waterfall')
-        save_dir = os.environ.get('SAVE_DIR', '/data')  
+        save_dir = os.environ.get('SAVE_DIR', '/data')
 
         # Remove files with name pattern `sample_*.mp4`
         for file_path in glob.glob(os.path.join(save_dir, 'sample_*.mp4')):
