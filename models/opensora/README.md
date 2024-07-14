@@ -49,10 +49,10 @@ sudo docker stop <container_name> # stop container
 
 Make request to the inference server:
 ```bash
-export SERVER_IP=150.136.145.26
+export SERVER_IP=140.238.37.247
 curl -X POST http://${SERVER_IP}:5000/generate -H "Content-Type: application/json" -d '{
     "num_frames": "24",
-    "resolution": "240p",
+    "resolution": "360p",
     "aspect_ratio": "16:9",
     "prompt": "a beautiful sunset",
     "save_dir" : "/data"
@@ -66,7 +66,7 @@ curl -X POST http://${SERVER_IP}:5000/generate -H "Content-Type: application/jso
 Run container in interactive mode:
 ```bash
 mkdir home/ubuntu/data
-sudo docker run -ti --gpus all -v /home/ubuntu/data:/data opensora
+sudo docker run -ti --gpus all -v /home/ubuntu/data:/data opensora_api:latest
 ```
 
 Run inference in container:

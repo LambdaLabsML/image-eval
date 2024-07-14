@@ -10,11 +10,18 @@ app = Flask(__name__)
 logging.basicConfig(filename='/data/api_server.log', level=logging.DEBUG, 
                     format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
+def get_available_gpus():
+    """Returns a list of available GPU IDs."""
+    try:
+        import torch
+        available_gpus = list(range(torch.cuda.device_count()))
+        return available_gpus
+    except Exception as e:
+        logging.error(f"Error getting available GPUs: {e}")
+        return []
 
 @app.route('/generate', methods=['POST'])
 def generate_image():
-
-
     try:
         data = request.json
         num_frames = data.get('num_frames', '4s')
@@ -27,10 +34,19 @@ def generate_image():
         for file_path in glob.glob(os.path.join(save_dir, 'sample_*.mp4')):
             os.remove(file_path)
             logging.debug(f"Removed file: {file_path}")
-        
+
+        # Get available GPUs
+        available_gpus = get_available_gpus()
+        if not available_gpus:
+            return jsonify({'message': 'No available GPUs found'}), 500
+
+        cuda_visible_devices = ','.join(map(str, available_gpus))
+        nproc_per_node = len(available_gpus)
+
         cmd = [
-            'python', 'scripts/inference.py',
-            'configs/opensora-v1-2/inference/sample.py',
+            'CUDA_VISIBLE_DEVICES=' + cuda_visible_devices,
+            'torchrun', '--nproc_per_node', str(nproc_per_node),
+            'scripts/inference.py', 'configs/opensora-v1-2/inference/sample.py',
             '--num-frames', num_frames,
             '--resolution', resolution,
             '--aspect-ratio', aspect_ratio,
@@ -39,7 +55,7 @@ def generate_image():
         ]
 
         logging.debug(f"Running command: {' '.join(cmd)}")
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(' '.join(cmd), shell=True, capture_output=True, text=True)
         logging.debug(f"Command output: {result.stdout}")  
         logging.error(f"Command error output: {result.stderr}")
         
