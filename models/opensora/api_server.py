@@ -39,7 +39,7 @@ def generate_image():
         available_gpus = get_available_gpus()
 
         # forcing single GPU until bug resolved https://github.com/orgs/LambdaLabsML/projects/14/views/1?pane=issue&itemId=70850852
-        available_gpu = available_gpu[0] 
+        available_gpu = available_gpus[0] 
         if not available_gpus:
             return jsonify({'message': 'No available GPUs found'}), 500
 
