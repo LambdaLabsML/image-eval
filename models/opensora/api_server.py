@@ -47,7 +47,8 @@ def generate_image():
         else:
             # forcing single GPU until bug resolved https://github.com/orgs/LambdaLabsML/projects/14/views/1?pane=issue&itemId=70850852
             cmd = [
-                'scripts/inference.py', 'configs/opensora-v1-2/inference/sample.py',
+                'python', 'scripts/inference.py',
+                'configs/opensora-v1-2/inference/sample.py',
                 '--num-frames', num_frames,
                 '--resolution', resolution,
                 '--aspect-ratio', aspect_ratio,
