@@ -1,7 +1,13 @@
-# image-eval
-Evaluation platform for text-to-image models
+# Text-to-video eval
 
-## Installation
+Evaluation platform for text-to-video models
+
+
+---
+
+## Text-to-image visual evaluation
+
+### Installation
 
 ```
 pip install -r requirements.txt
@@ -10,7 +16,7 @@ pip install -r requirements.txt
 export HF_TOKEN=your_hugging_face_token
 ```
 
-## Usage
+### Usage
 
 ```
 streamlit run app.py
