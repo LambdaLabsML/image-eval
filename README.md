@@ -1,5 +1,11 @@
-# image-eval
-Evaluation platform for text-to-image models
+# Text-to-video eval
+
+Evaluation platform for text-to-video models
+
+
+---
+
+# Text-to-image visual evaluation
 
 ## Installation
 
