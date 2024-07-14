@@ -15,6 +15,10 @@ IMAGE_EVAL_REPO="https://github.com/LambdaLabsML/image-eval.git"
 
 # Setup OpenSora base image
 echo "Cloning OpenSora repository..."
+if [ -d "Open-Sora" ]; then
+    echo "Removing existing Open-Sora directory..."
+    rm -rf Open-Sora
+fi
 git clone $OPEN_SORA_REPO || { echo "Failed to clone OpenSora repository"; exit 1; }
 cd Open-Sora
 echo "Building OpenSora Docker image..."
@@ -23,7 +27,12 @@ sudo docker build -t opensora -f Dockerfile . || { echo "Failed to build OpenSor
 # Clone image-eval repository
 echo "Cloning image-eval repository..."
 cd ~
+if [ -d "image-eval" ]; then
+    echo "Removing existing image-eval directory..."
+    rm -rf image-eval
+fi
 git clone $IMAGE_EVAL_REPO || { echo "Failed to clone image-eval repository"; exit 1; }
+
 
 # Build OpenSora inference server image
 echo "Building OpenSora inference server Docker image..."
