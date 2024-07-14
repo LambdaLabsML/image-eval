@@ -13,6 +13,16 @@ trap 'handle_error $LINENO' ERR
 OPEN_SORA_REPO="https://github.com/hpcaitech/Open-Sora.git"
 IMAGE_EVAL_REPO="https://github.com/LambdaLabsML/image-eval.git"
 
+# Ensure required directories exist
+echo "Checking required directories..."
+if [ -d "/home/ubuntu/data" ]; then
+    echo "Removing existing /home/ubuntu/data directory..."
+    sudo rm -rf /home/ubuntu/data
+fi
+echo "Creating /home/ubuntu/data directory..."
+sudo mkdir -p /home/ubuntu/data
+sudo chown $USER:$USER /home/ubuntu/data
+
 # Setup OpenSora base image
 echo "Cloning OpenSora repository..."
 if [ -d "Open-Sora" ]; then
