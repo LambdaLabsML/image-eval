@@ -73,7 +73,7 @@ def generate_image():
 
         # Run inference cmd
         cmd_str = get_cmd_str(data, multi_gpu=False)
-        result = subprocess.run(cmd_str, shell=True, capture_output=True, text=True)
+        result = subprocess.run(cmd_str, capture_output=True, text=True)
         logging.debug(f"Command output: {result.stdout}")  
         logging.error(f"Command error output: {result.stderr}")
         
