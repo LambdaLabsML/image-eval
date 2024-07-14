@@ -1,6 +1,18 @@
 # Deploying OpenSora 1.2 for inference on Lambda On-demand Cloud instances
 
-## Setup
+## Setup (deployment script)
+
+The following assumes ssh access to a lambda ODC instance.
+
+```bash
+cd models/opensora && \
+hostname=imageeval && \
+scp deploy_endpoint.sh ubuntu@${hostname}:/tmp/ && \
+ssh ubuntu@${hostname} 'chmod +x /tmp/deploy_endpoint.sh && /tmp/deploy_endpoint.sh'
+```
+
+
+## Setup (manually)
 
 Build opensora base image
 ```bash
