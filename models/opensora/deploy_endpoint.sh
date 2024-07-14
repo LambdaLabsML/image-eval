@@ -25,27 +25,17 @@ echo "Creating /home/ubuntu/data directory..."
 sudo mkdir -p /home/ubuntu/data
 sudo chown $USER:$USER /home/ubuntu/data
 
-# Function to remove existing Docker image and stop container if exists
-remove_existing_image_and_container() {
-    local image_name=$1
-    local container_name=$2
-    
-    # Stop running container if it exists
-    if sudo docker ps -a | grep -q $container_name; then
-        echo "Stopping and removing existing Docker container $container_name..."
-        sudo docker stop $container_name || true
-        sudo docker rm $container_name || true
-    fi
-    
-    # Remove Docker image if it exists
-    if sudo docker images | grep -q $image_name; then
-        echo "Removing existing Docker image $image_name..."
-        sudo docker rmi $image_name || true
-    fi
-}
+# Remove all containers
+containers=$(sudo docker ps -qa)
+if [ -n "$containers" ]; then
+    sudo docker rm -v -f $containers
+else
+    echo "No containers to remove"
+fi
 
-# Remove existing OpenSora base image and container
-remove_existing_image_and_container $IMAGE_NAME $CONTAINER_NAME
+
+# Remove all images
+sudo docker image prune --all --force
 
 # Clone OpenSora repository
 echo "Cloning OpenSora repository..."
@@ -70,7 +60,6 @@ git clone $IMAGE_EVAL_REPO || { echo "Failed to clone image-eval repository"; ex
 # Build OpenSora inference server image
 echo "Building OpenSora inference server Docker image..."
 cd image-eval/models/opensora
-remove_existing_image_and_container ${IMAGE_NAME}_api ${CONTAINER_NAME}_api
 sudo docker build -t ${IMAGE_NAME}_api . || { echo "Failed to build OpenSora inference server Docker image"; exit 1; }
 
 # Run the inference server
