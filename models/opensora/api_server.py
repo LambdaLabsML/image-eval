@@ -23,8 +23,8 @@ def get_available_gpus():
 @app.route('/generate', methods=['POST'])
 def generate_image():
         
-    def get_cmd_str(data, multi_gpu=False):
-        num_frames = data.get('num_frames', '4s')
+    def get_cmd_list(data, multi_gpu=False):
+        num_frames = data.get('num_frames', '4')
         resolution = data.get('resolution', '360p')
         aspect_ratio = data.get('aspect_ratio', '9:16')
         prompt = data.get('prompt', 'a beautiful waterfall')
@@ -56,9 +56,8 @@ def generate_image():
                 '--save-dir', os.environ.get('SAVE_DIR', '/data')
             ]
 
-        cmd_str = ' '.join(cmd)
-        logging.debug(f"Running command: {cmd_str}")
-        return cmd_str
+        logging.debug(f"Running command: {' '.join(cmd)}")
+        return cmd
 
     try:
         data = request.json
@@ -70,10 +69,9 @@ def generate_image():
             os.remove(file_path)
             logging.debug(f"Removed file: {file_path}")
 
-
         # Run inference cmd
-        cmd_str = get_cmd_str(data, multi_gpu=False)
-        result = subprocess.run(cmd_str, capture_output=True, text=True)
+        cmd_list = get_cmd_list(data, multi_gpu=False)
+        result = subprocess.run(cmd_list, capture_output=True, text=True)
         logging.debug(f"Command output: {result.stdout}")  
         logging.error(f"Command error output: {result.stderr}")
         

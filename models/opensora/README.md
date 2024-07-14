@@ -44,6 +44,13 @@ sudo docker ps # identify name of container to stop
 sudo docker stop <container_name> # stop container
 ```
 
+Remove image and stop container:
+```bash
+sudo docker ps # identify name of container to stop
+sudo docker stop <container_name> # stop container
+sudo docker rmi opensora_api:latest
+
+```
 
 ## Usage
 
