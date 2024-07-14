@@ -22,43 +22,57 @@ def get_available_gpus():
 
 @app.route('/generate', methods=['POST'])
 def generate_image():
-    try:
-        data = request.json
+        
+    def get_cmd_str(data, multi_gpu=False):
         num_frames = data.get('num_frames', '4s')
         resolution = data.get('resolution', '360p')
         aspect_ratio = data.get('aspect_ratio', '9:16')
         prompt = data.get('prompt', 'a beautiful waterfall')
-        save_dir = os.environ.get('SAVE_DIR', '/data')
+
+        if multi_gpu:
+            available_gpus = get_available_gpus()
+            cuda_visible_devices = ','.join(map(str, available_gpus))
+            nproc_per_node = len(available_gpus)
+
+            cmd = [
+                'CUDA_VISIBLE_DEVICES=' + cuda_visible_devices,
+                'torchrun', '--nproc_per_node', str(nproc_per_node),
+                'scripts/inference.py', 'configs/opensora-v1-2/inference/sample.py',
+                '--num-frames', num_frames,
+                '--resolution', resolution,
+                '--aspect-ratio', aspect_ratio,
+                '--prompt', prompt,
+                '--save-dir', os.environ.get('SAVE_DIR', '/data')
+            ]
+        else:
+            # forcing single GPU until bug resolved https://github.com/orgs/LambdaLabsML/projects/14/views/1?pane=issue&itemId=70850852
+            cmd = [
+                'scripts/inference.py', 'configs/opensora-v1-2/inference/sample.py',
+                '--num-frames', num_frames,
+                '--resolution', resolution,
+                '--aspect-ratio', aspect_ratio,
+                '--prompt', prompt,
+                '--save-dir', os.environ.get('SAVE_DIR', '/data')
+            ]
+
+        cmd_str = ' '.join(cmd)
+        logging.debug(f"Running command: {cmd_str}")
+        return cmd_str
+
+    try:
+        data = request.json
+        logging.debug(f"Request data: {data}")
 
         # Remove files with name pattern `sample_*.mp4`
+        save_dir = os.environ.get('SAVE_DIR', '/data')
         for file_path in glob.glob(os.path.join(save_dir, 'sample_*.mp4')):
             os.remove(file_path)
             logging.debug(f"Removed file: {file_path}")
 
-        # Get available GPUs
-        available_gpus = get_available_gpus()
 
-        # forcing single GPU until bug resolved https://github.com/orgs/LambdaLabsML/projects/14/views/1?pane=issue&itemId=70850852
-        available_gpu = available_gpus[0] 
-        if not available_gpus:
-            return jsonify({'message': 'No available GPUs found'}), 500
-
-        cuda_visible_devices = ','.join(map(str, available_gpus))
-        nproc_per_node = len(available_gpus)
-
-        cmd = [
-            'CUDA_VISIBLE_DEVICES=' + cuda_visible_devices,
-            'torchrun', '--nproc_per_node', str(nproc_per_node),
-            'scripts/inference.py', 'configs/opensora-v1-2/inference/sample.py',
-            '--num-frames', num_frames,
-            '--resolution', resolution,
-            '--aspect-ratio', aspect_ratio,
-            '--prompt', prompt,
-            '--save-dir', save_dir
-        ]
-
-        logging.debug(f"Running command: {' '.join(cmd)}")
-        result = subprocess.run(' '.join(cmd), shell=True, capture_output=True, text=True)
+        # Run inference cmd
+        cmd_str = get_cmd_str(data, multi_gpu=False)
+        result = subprocess.run(cmd_str, shell=True, capture_output=True, text=True)
         logging.debug(f"Command output: {result.stdout}")  
         logging.error(f"Command error output: {result.stderr}")
         
