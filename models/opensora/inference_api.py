@@ -91,9 +91,9 @@ def generate_image():
     #     else:
     #         logging.error("Image generation failed")
     #         return jsonify({'message': 'Image generation failed', 'error': result.stderr}), 500
-    # except Exception as e:
-    #     logging.exception("An unexpected error occurred")
-    #     return jsonify({'message': 'Internal server error', 'error': str(e)}), 500
+    except Exception as e:
+        logging.exception("An unexpected error occurred")
+        return jsonify({'message': 'Internal server error', 'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
