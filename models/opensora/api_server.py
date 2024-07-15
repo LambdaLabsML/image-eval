@@ -75,24 +75,24 @@ def generate_image():
         logging.debug(f"Command output: {result.stdout}")  
         logging.error(f"Command error output: {result.stderr}")
         
-        if result.returncode == 0:
-            # Assuming the generated file is saved in the save_dir with a known name
-            generated_file_path = os.path.join(save_dir, 'sample_0000.mp4')  # Update this with the correct filename
-            if os.path.exists(generated_file_path):
-                response = send_file(generated_file_path, as_attachment=True)
-                # Remove the file after sending it
-                os.remove(generated_file_path)
-                logging.debug(f"Removed file after sending: {generated_file_path}")
-                return response
-            else:
-                logging.error(f"Generated file not found: {generated_file_path}")
-                return jsonify({'message': 'Image generation successful, but file not found', 'save_dir': save_dir}), 200
-        else:
-            logging.error("Image generation failed")
-            return jsonify({'message': 'Image generation failed', 'error': result.stderr}), 500
-    except Exception as e:
-        logging.exception("An unexpected error occurred")
-        return jsonify({'message': 'Internal server error', 'error': str(e)}), 500
+    #     if result.returncode == 0:
+    #         # Assuming the generated file is saved in the save_dir with a known name
+    #         generated_file_path = os.path.join(save_dir, 'sample_0000.mp4')  # Update this with the correct filename
+    #         if os.path.exists(generated_file_path):
+    #             response = send_file(generated_file_path, as_attachment=True)
+    #             # Remove the file after sending it
+    #             os.remove(generated_file_path)
+    #             logging.debug(f"Removed file after sending: {generated_file_path}")
+    #             return response
+    #         else:
+    #             logging.error(f"Generated file not found: {generated_file_path}")
+    #             return jsonify({'message': 'Image generation successful, but file not found', 'save_dir': save_dir}), 200
+    #     else:
+    #         logging.error("Image generation failed")
+    #         return jsonify({'message': 'Image generation failed', 'error': result.stderr}), 500
+    # except Exception as e:
+    #     logging.exception("An unexpected error occurred")
+    #     return jsonify({'message': 'Internal server error', 'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
