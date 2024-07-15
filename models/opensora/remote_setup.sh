@@ -15,8 +15,6 @@ IMAGE_EVAL_REPO="https://github.com/LambdaLabsML/image-eval.git"
 IMAGE_NAME="opensora"
 CONTAINER_NAME="opensora_api"
 
-# Read hostname parameter
-SERVER_IP="$1"
 
 # Ensure required directories exist
 echo "Checking required directories..."
@@ -94,7 +92,8 @@ echo "Deployment script completed successfully."
 
 # Print example request
 echo "You can make a request to the inference server using the following command:"
-echo "curl -X POST http://${SERVER_IP}:5000/generate -H \"Content-Type: application/json\" -d '{
+echo "SERVER_IP=<...>"
+echo "curl -X POST http://\${SERVER_IP}:5000/generate -H \"Content-Type: application/json\" -d '{
     \"num_frames\": \"24\",
     \"resolution\": \"240p\",
     \"aspect_ratio\": \"16:9\",

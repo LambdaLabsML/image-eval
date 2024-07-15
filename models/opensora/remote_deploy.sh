@@ -15,10 +15,7 @@ DEFAULT_HOSTNAME="imageeval"
 # Read hostname parameter or use default
 HOSTNAME="${1:-$DEFAULT_HOSTNAME}"
 
-# Resolve hostname to IP address
-SERVER_IP=$(ssh ${HOSTNAME} "hostname -I | awk '{print \$1}'")
-
 # Copy the deploy script to the remote host and execute it using the SSH alias
 scp remote_setup.sh ${HOSTNAME}:/tmp/ && \
-ssh ${HOSTNAME} 'chmod +x /tmp/remote_setup.sh && /tmp/remote_setup.sh' "$SERVER_IP" || { echo "Failed to execute the setup script on remote host"; exit 1; }
+ssh ${HOSTNAME} 'chmod +x /tmp/remote_setup.sh && /tmp/remote_setup.sh' || { echo "Failed to execute the setup script on remote host"; exit 1; }
 echo "Script executed successfully on ${HOSTNAME}"
