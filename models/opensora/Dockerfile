@@ -4,7 +4,7 @@ FROM opensora:latest
 RUN pip install Flask
 
 # Copy the Flask API server script
-COPY api_server.py .
+COPY inference_api.py .
 
 # Set the environment variable for save directory
 ENV SAVE_DIR="/data"
@@ -13,4 +13,4 @@ ENV SAVE_DIR="/data"
 EXPOSE 5000
 
 # Run the API server
-CMD ["python", "api_server.py"]
+CMD ["python", "inference_api.py"]
