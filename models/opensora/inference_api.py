@@ -75,8 +75,8 @@ def generate_image():
         logging.debug(f"Command output: {result.stdout}")  
         logging.error(f"Command error output: {result.stderr}")
         
-        if result.returncode == 0:
-            print("test success")
+        # if result.returncode == 0:
+        #     print("test success")
     #         # Assuming the generated file is saved in the save_dir with a known name
     #         generated_file_path = os.path.join(save_dir, 'sample_0000.mp4')  # Update this with the correct filename
     #         if os.path.exists(generated_file_path):

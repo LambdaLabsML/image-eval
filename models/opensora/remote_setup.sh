@@ -33,9 +33,16 @@ else
     echo "No containers to remove"
 fi
 
+# Update inference server code
+cd ~
+if [ -d "image-eval" ]; then
+    echo "Removing existing image-eval directory..."
+    rm -rf image-eval
+fi
+git clone $IMAGE_EVAL_REPO || { echo "Failed to clone image-eval repository"; exit 1; }
+
 # Check if opensora:latest exists
 opensora_image_id=$(sudo docker images -q opensora:latest)
-
 if [ -n "$opensora_image_id" ]; then
     echo "opensora:latest image found. Removing all other docker images..."
     all_images=$(sudo docker images -q)
@@ -52,10 +59,7 @@ else
     else
         echo "No images to remove"
     fi
-    
-    echo "Removing Open-Sora and image-eval repositories..."
-    rm -rf Open-Sora
-    rm -rf image-eval
+
 
     # Clone OpenSora repository
     echo "Cloning OpenSora repository..."
@@ -81,7 +85,7 @@ fi
 # Build OpenSora inference server image
 echo "Building OpenSora inference server Docker image..."
 cd image-eval/models/opensora
-sudo docker build -t ${IMAGE_NAME}_api . || { echo "Failed to build OpenSora inference server Docker image"; exit 1; }
+sudo docker build --no-cache -t ${IMAGE_NAME}_api . || { echo "Failed to build OpenSora inference server Docker image"; exit 1; }
 
 # Run the inference server
 echo "Running OpenSora inference server..."
