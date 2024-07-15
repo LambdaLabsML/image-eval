@@ -5,8 +5,11 @@
 The following assumes ssh access to a lambda ODC instance.
 
 ```bash
-chmod +x remote_setup.sh
-./remote_setup.sh
+cd ~/Workspaces/image-eval/models/opensora && chmod +x remote_deploy.sh
+```
+
+```bash
+./remote_deploy.sh
 ```
 
 

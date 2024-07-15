@@ -15,6 +15,9 @@ IMAGE_EVAL_REPO="https://github.com/LambdaLabsML/image-eval.git"
 IMAGE_NAME="opensora"
 CONTAINER_NAME="opensora_api"
 
+# Read hostname parameter
+SERVER_IP="$1"
+
 # Ensure required directories exist
 echo "Checking required directories..."
 if [ -d "/home/ubuntu/data" ]; then
@@ -38,20 +41,21 @@ opensora_image_exists=$(sudo docker images -q opensora:latest)
 
 if [ -n "$opensora_image_exists" ]; then
     echo "opensora:latest image found. Removing all other docker images..."
-    images=$(sudo docker images -q | grep -v $(sudo docker images -q opensora:latest))
-    if [ -n "$images" ]; then
-        sudo docker rmi -f $images
-    else
-        echo "No images to remove"
-    fi
+    all_images=$(sudo docker images -q)
+    for image in $all_images; do
+        if [ "$image" != "$opensora_image_exists" ]; then
+            sudo docker rmi -f $image
+        fi
+    done
 else
     echo "opensora:latest image not found. Removing all docker images and repositories..."
-    images=$(sudo docker images -q)
-    if [ -n "$images" ]; then
-        sudo docker rmi -f $images
+    all_images=$(sudo docker images -q)
+    if [ -n "$all_images" ]; then
+        sudo docker rmi -f $all_images
     else
         echo "No images to remove"
     fi
+    
     echo "Removing Open-Sora and image-eval repositories..."
     rm -rf Open-Sora
     rm -rf image-eval

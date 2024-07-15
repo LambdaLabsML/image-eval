@@ -9,17 +9,16 @@ handle_error() {
 # Trap errors
 trap 'handle_error $LINENO' ERR
 
-# Default hostname
+# Default hostname alias
 DEFAULT_HOSTNAME="imageeval"
 
 # Read hostname parameter or use default
 HOSTNAME="${1:-$DEFAULT_HOSTNAME}"
 
-# Navigate to models/opensora directory
-cd models/opensora || { echo "Failed to navigate to models/opensora directory"; exit 1; }
+# Resolve hostname to IP address
+SERVER_IP=$(ssh ${HOSTNAME} "hostname -I | awk '{print \$1}'")
 
-# Copy the deploy script to the remote host and execute it
-scp remote_deploy.sh ubuntu@${HOSTNAME}:/tmp/ && \
-ssh ubuntu@${HOSTNAME} 'chmod +x /tmp/remote_deploy.sh && /tmp/remote_deploy.sh' || { echo "Failed to deploy and execute script on remote host"; exit 1; }
-
+# Copy the deploy script to the remote host and execute it using the SSH alias
+scp remote_setup.sh ${HOSTNAME}:/tmp/ && \
+ssh ${HOSTNAME} 'chmod +x /tmp/remote_setup.sh && /tmp/remote_setup.sh' "$SERVER_IP" || { echo "Failed to execute the setup script on remote host"; exit 1; }
 echo "Script executed successfully on ${HOSTNAME}"
