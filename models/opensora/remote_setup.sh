@@ -85,7 +85,7 @@ fi
 # Build OpenSora inference server image
 echo "Building OpenSora inference server Docker image..."
 cd image-eval/models/opensora
-sudo docker build --no-cache -t ${IMAGE_NAME}_api . || { echo "Failed to build OpenSora inference server Docker image"; exit 1; }
+sudo docker build -t ${IMAGE_NAME}_api . || { echo "Failed to build OpenSora inference server Docker image"; exit 1; }
 
 # Run the inference server
 echo "Running OpenSora inference server..."
