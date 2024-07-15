@@ -15,7 +15,6 @@ IMAGE_EVAL_REPO="https://github.com/LambdaLabsML/image-eval.git"
 IMAGE_NAME="opensora"
 CONTAINER_NAME="opensora_api"
 
-
 # Ensure required directories exist
 echo "Checking required directories..."
 if [ -d "/home/ubuntu/data" ]; then
@@ -35,13 +34,13 @@ else
 fi
 
 # Check if opensora:latest exists
-opensora_image_exists=$(sudo docker images -q opensora:latest)
+opensora_image_id=$(sudo docker images -q opensora:latest)
 
-if [ -n "$opensora_image_exists" ]; then
+if [ -n "$opensora_image_id" ]; then
     echo "opensora:latest image found. Removing all other docker images..."
     all_images=$(sudo docker images -q)
     for image in $all_images; do
-        if [ "$image" != "$opensora_image_exists" ]; then
+        if [ "$image" != "$opensora_image_id" ]; then
             sudo docker rmi -f $image
         fi
     done
@@ -92,11 +91,15 @@ echo "Deployment script completed successfully."
 
 # Print example request
 echo "You can make a request to the inference server using the following command:"
-echo "SERVER_IP=<...>"
-echo "curl -X POST http://\${SERVER_IP}:5000/generate -H \"Content-Type: application/json\" -d '{
-    \"num_frames\": \"24\",
-    \"resolution\": \"240p\",
-    \"aspect_ratio\": \"16:9\",
-    \"prompt\": \"a beautiful sunset\",
-    \"save_dir\" : \"/data\"
-}' --output /tmp/opensora_sample.mp4"
+echo '```'
+echo "$ SERVER_IP=<...>"
+echo ''
+echo "$ curl -X POST http://\${SERVER_IP}:5000/generate -H \"Content-Type: application/json\" -d '{
+        \"num_frames\": \"24\",
+        \"resolution\": \"240p\",
+        \"aspect_ratio\": \"16:9\",
+        \"prompt\": \"a beautiful sunset\",
+        \"save_dir\" : \"/data\"
+    }' --output /tmp/opensora_sample.mp4"
+echo '```'
+echo ''
