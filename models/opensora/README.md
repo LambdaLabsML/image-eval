@@ -1,6 +1,8 @@
 # Deploying OpenSora 1.2 for inference on Lambda On-demand Cloud instances
 
-
+Requirements:
+* Build `opensora` or `opensora_api` image (see steps below)
+* Create `~/data` dir to mount to the opensora container (should be included in the setup for step#1)
 
 
 ## Simple workflow, directly run in ODC node
@@ -13,16 +15,20 @@ sudo docker run -d --gpus all -v /home/ubuntu/data:/data --name opensora_contain
 
 Execute the command in the running container:
 ```bash
-sudo docker exec opensora_container python scripts/inference.py \
+sudo docker exec opensora_container nohup python scripts/inference.py \
     configs/opensora-v1-2/inference/sample.py \
     --num-frames 96 \
     --resolution 720p \
     --aspect-ratio 9:16 \
     --prompt-path /data/sample_prompts.txt \
-    --save-dir /data/sora1.2 > /home/ubuntu/data/opensora.log 2>&1
+    --save-dir /data/sora1.2 > /home/ubuntu/data/opensora.log 2>&1 &
 ```
 
-Note: logs are being written to `/home/ubuntu/data/opensora.log`
+Note:
+* Command ran with `nohup` so terminal can be closed without interruting run
+* Use `sudo docker stop opensora_container` to stop running container and interrupt job
+* Use `sudo docker rm opensora_container` to remove container
+* logs are being written to `/home/ubuntu/data/opensora.log`
 
 ### Interactive mode (debug)
 
