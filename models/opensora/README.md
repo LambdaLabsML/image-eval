@@ -1,6 +1,77 @@
 # Deploying OpenSora 1.2 for inference on Lambda On-demand Cloud instances
 
-## Setup (deployment script)
+
+
+
+## Simple workflow, directly run in ODC node
+
+
+Start the container in detached mode and keep it running:
+```bash
+sudo docker run -d --gpus all -v /home/ubuntu/data:/data --name opensora_container opensora_api:latest tail -f /dev/null
+```
+
+Execute the command in the running container:
+```bash
+sudo docker exec opensora_container python scripts/inference.py \
+    configs/opensora-v1-2/inference/sample.py \
+    --num-frames 96 \
+    --resolution 720p \
+    --aspect-ratio 9:16 \
+    --prompt-path /data/sample_prompts.txt \
+    --save-dir /data/sora1.2 > /home/ubuntu/data/opensora.log 2>&1
+```
+
+Note: logs are being written to `/home/ubuntu/data/opensora.log`
+
+### Interactive mode (debug)
+
+Run container in interactive mode:
+```bash
+mkdir home/ubuntu/data
+sudo docker run -ti --gpus all -v /home/ubuntu/data:/data opensora_api:latest
+```
+
+Run inference in container:
+```bash
+(pytorch) root@6a7431d9eadb:/workspace/Open-Sora# 
+python scripts/inference.py \
+    configs/opensora-v1-2/inference/sample.py \
+    --num-frames 4s \
+    --resolution 360p \
+    --aspect-ratio 9:16 \
+    --prompt "a beautiful waterfall" \
+    --save-dir /data
+```
+
+Multiple generation
+```bash
+python scripts/inference.py \
+    configs/opensora-v1-2/inference/sample.py \
+    --num-frames 96 \
+    --resolution 360p \
+    --aspect-ratio 9:16 \
+    --prompt "a beautiful waterfall" "a young woman dancing" \
+    --save-dir /data
+```
+
+Generation from prompts file
+```bash
+python scripts/inference.py \
+    configs/opensora-v1-2/inference/sample.py \
+    --num-frames 96 \
+    --resolution 720p \
+    --aspect-ratio 9:16 \
+    --prompt-path /data/sample_prompts.txt \
+    --save-dir /data/sora1.2
+```
+
+---
+
+
+## Endpoint workflow (WIP)
+
+### Setup remote endpoint (script)
 
 The following assumes ssh access to a lambda ODC instance.
 
@@ -13,7 +84,7 @@ cd ~/Workspaces/image-eval/models/opensora && chmod +x remote_deploy.sh
 ```
 
 
-## Setup (manually)
+### Setup remote endpoint (manual step-by-step)
 
 Build opensora base image
 ```bash
@@ -65,28 +136,6 @@ curl -X POST http://${SERVER_IP}:5000/generate -H "Content-Type: application/jso
     "prompt": "a beautiful sunset",
     "save_dir" : "/data"
 }' --output /tmp/opensora_sample.mp4
-```
-
-
-
-## Usage (deprecated)
-
-Run container in interactive mode:
-```bash
-mkdir home/ubuntu/data
-sudo docker run -ti --gpus all -v /home/ubuntu/data:/data opensora_api:latest
-```
-
-Run inference in container:
-```bash
-(pytorch) root@6a7431d9eadb:/workspace/Open-Sora# 
-python scripts/inference.py \
-    configs/opensora-v1-2/inference/sample.py \
-    --num-frames 4s \
-    --resolution 360p \
-    --aspect-ratio 9:16 \
-    --prompt "a beautiful waterfall" \
-    --save-dir /data
 ```
 
 
