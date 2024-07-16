@@ -4,6 +4,8 @@ Requirements:
 * Build `opensora` or `opensora_api` image (see steps below)
 * Create `~/data` dir to mount to the opensora container (should be included in the setup for step#1)
 
+Notes:
+* sora1.2 max res is 720p and sora1.1 max res is 480p
 
 ## Simple workflow, directly run in ODC node
 
