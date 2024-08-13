@@ -1,4 +1,4 @@
-# Deploying OpenSora 1.2 for inference on Lambda On-demand Cloud instances
+## Serving OpenSora 1.2 on Lambda Cloud
 
 Requirements:
 * Build `opensora` or `opensora_api` image (see steps below)

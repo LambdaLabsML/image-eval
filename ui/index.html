@@ -25,12 +25,30 @@
 </head>
 <body>
     <h1>Prompt and Model Comparison</h1>
+
+    <label for="modelA-select">Select Model A:</label>
+    <select id="modelA-select">
+        <option value="sora1.1-stdit-480p">sora1.1-stdit-480p</option>
+        <option value="sora1.2-stdit-480p">sora1.2-stdit-480p</option>
+        <option value="sora1.2-stdit-720p">sora1.2-stdit-720p</option>
+    </select>
+
+    <label for="modelB-select">Select Model B:</label>
+    <select id="modelB-select">
+        <option value="sora1.1-stdit-480p">sora1.1-stdit-480p</option>
+        <option value="sora1.2-stdit-480p" selected>sora1.2-stdit-480p</option>
+        <option value="sora1.2-stdit-720p">sora1.2-stdit-720p</option>
+    </select>
+
+    <button id="prev-button" disabled>Previous</button>
+    <button id="next-button" disabled>Next</button>
+
     <table>
         <thead>
             <tr>
                 <th>Prompt</th>
-                <th>Model A Output</th>
-                <th>Model B Output</th>
+                <th id="modelA-header">Model A Output</th>
+                <th id="modelB-header">Model B Output</th>
             </tr>
         </thead>
         <tbody id="table-body">
