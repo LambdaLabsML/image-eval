@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TextToVideo Application</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>TextToVideo Application</h1>
+
+    <nav>
+        <button id="arena-tab" class="active">Arena</button>
+        <button id="leaderboard-tab">Leaderboard</button>
+    </nav>
+
+    <section id="arena-section" class="active">
+        <!-- Arena Content -->
+        <div class="progress-container">
+            <progress id="progress-bar" value="0" max="100"></progress>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th id="modelA-header">
+                        <select id="modelA-select">
+                            <option value="sora1.1-stdit-480p" selected>sora1.1-stdit-480p</option>
+                            <option value="sora1.2-stdit-480p">sora1.2-stdit-480p</option>
+                            <option value="sora1.2-stdit-720p">sora1.2-stdit-720p</option>
+                        </select>
+                    </th>
+                    <th id="modelB-header">
+                        <select id="modelB-select">
+                            <option value="sora1.1-stdit-480p">sora1.1-stdit-480p</option>
+                            <option value="sora1.2-stdit-480p" selected>sora1.2-stdit-480p</option>
+                            <option value="sora1.2-stdit-720p">sora1.2-stdit-720p</option>
+                        </select>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Table rows will be added here by JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="prompt-container" id="prompt-display">
+            <!-- Prompt text will be displayed here -->
+        </div>
+
+        <div class="button-container">
+            <button id="prev-button">←</button>
+            <button id="next-button">→</button>
+        </div>
+    </section>
+
+    <section id="leaderboard-section">
+        <!-- Leaderboard Content -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Model</th>
+                    <th>Arena Score</th>
+                    <th>Votes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>sora1.2-stdit-480p</td>
+                    <td>92.5</td>
+                    <td>1500</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>sora1.1-stdit-480p</td>
+                    <td>87.3</td>
+                    <td>1200</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>sora1.2-stdit-720p</td>
+                    <td>85.6</td>
+                    <td>1100</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

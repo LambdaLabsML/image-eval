@@ -1,0 +1,148 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #e0e0e0;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+nav button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 24px;
+    cursor: pointer;
+    margin: 0 10px;
+    border-radius: 5px;
+}
+
+nav button.active {
+    background-color: #0056b3;
+}
+
+section {
+    display: none;
+}
+
+section.active {
+    display: block;
+}
+
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+th,
+td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #333;
+    vertical-align: top;
+}
+
+th {
+    background-color: #007bff;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 32px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+video {
+    width: 620px;
+    height: 360px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    object-fit: cover;
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.checked .overlay {
+    opacity: 1;
+}
+
+.prompt-container {
+    text-align: center;
+    font-size: 24px;
+    font-style: italic;
+    margin-top: 15px;
+    color: #e0e0e0;
+}
+
+.button-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.button-container button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 24px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    width: 60px;
+}
+
+.button-container button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+.video-container {
+    position: relative;
+    display: inline-block;
+}
+
+.progress-container {
+    width: 90%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+progress {
+    width: 100%;
+    height: 30px;
+    background-color: #333;
+}
